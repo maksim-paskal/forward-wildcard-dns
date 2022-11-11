@@ -1,0 +1,22 @@
+.:53 {
+  debug
+
+  errors {
+    consolidate 10s ".* i/o timeout$"
+    consolidate 10s ".* write: operation not permitted$"
+  }
+
+  cache 300
+
+  hosts {
+    {$SERVER_IP} some-server-ip.local
+  }
+
+  rewrite stop name regex {$WILDCARD} some-server-ip.local answer auto
+
+  forward . /etc/resolv.conf
+
+  loop
+  reload
+  loadbalance
+}
